@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Lokální nástroje / dev
+.claude/
+
+# Pracovní soubory (nejsou součástí webu)
+_photos_review/
+_logo_review/
+*.zip
+
+# Nepoužívané původní assety (hero používá frames/, ne video)
+assets/build.mp4
+assets/build.webm
+assets/build-poster.jpg
