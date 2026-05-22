@@ -355,13 +355,14 @@ a { color: inherit; text-decoration: none; }
 
 .hero-caption {
   position: absolute;
-  left: 0; bottom: -18px;
+  left: 16px; bottom: 16px;
+  z-index: 3;
   display: flex; flex-direction: column;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 12px;
   padding: 10px 16px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   min-width: 180px;
 }
 .caption-label {
