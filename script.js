@@ -363,33 +363,16 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Odesílám…'; }
 
     const data = new FormData(form);
-    const accessKey = data.get('access_key');
-
-    // Fallback: pokud Web3Forms access key není nastaven, otevři mailto
-    if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
-      const subject = `Poptávka ze StavHor.cz — ${data.get('sluzba') || 'služba'}`;
-      const body =
-`Jméno: ${data.get('jmeno') || ''}
-Telefon: ${data.get('telefon') || ''}
-E-mail: ${data.get('email') || ''}
-Služba: ${data.get('sluzba') || ''}
-Lokalita: ${data.get('lokalita') || ''}
-Termín: ${data.get('termin') || ''}
-
-Popis:
-${data.get('zprava') || ''}`;
-      window.location.href = `mailto:stavhor@stavhor.cz?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      show('done');
-      return;
-    }
+    const payload = {};
+    for (const [k, v] of data.entries()) payload[k] = v;
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: data
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (res.ok && json.success) {
         show('done');
       } else {
