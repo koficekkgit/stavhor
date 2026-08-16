@@ -1,4 +1,4 @@
-// Vercel serverless funkce — odešle poptávku z formuláře e-mailem přes SMTP.
+// Vercel serverless funkce: odešle poptávku z formuláře e-mailem přes SMTP.
 // Vyžaduje env vary nastavené v Vercel dashboardu (Settings → Environment Variables).
 import nodemailer from 'nodemailer';
 
@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const body = req.body || {};
   const { jmeno, telefon, email, sluzba, lokalita, termin, zprava, botcheck } = body;
 
-  // Honeypot — bot vyplní; vrátíme úspěch, ale nic neposíláme.
+  // Honeypot: bot vyplní; vrátíme úspěch, ale nic neposíláme.
   if (botcheck) return res.status(200).json({ success: true });
 
   if (!jmeno || !telefon || !sluzba) {
@@ -44,13 +44,13 @@ export default async function handler(req, res) {
     '',
     `Jméno:    ${jmeno}`,
     `Telefon:  ${telefon}`,
-    `E-mail:   ${email || '—'}`,
+    `E-mail:   ${email || 'neuvedeno'}`,
     `Služba:   ${sluzba}`,
-    `Lokalita: ${lokalita || '—'}`,
-    `Termín:   ${termin || '—'}`,
+    `Lokalita: ${lokalita || 'neuvedeno'}`,
+    `Termín:   ${termin || 'neuvedeno'}`,
     '',
     'Popis:',
-    zprava || '—',
+    zprava || 'neuvedeno',
   ].join('\n');
 
   try {
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
       from: `"StavHor formulář" <${SMTP_USER}>`,
       to: MAIL_TO || SMTP_USER,
       replyTo: email || undefined,
-      subject: `Nová poptávka: ${sluzba} — ${jmeno}`,
+      subject: `Nová poptávka: ${sluzba} (${jmeno})`,
       text,
     });
     return res.status(200).json({ success: true });

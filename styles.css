@@ -532,7 +532,7 @@ a { color: inherit; text-decoration: none; }
     font-size: 10px;
   }
 
-  /* Stage strip zcela mimo — caption je dost */
+  /* Stage strip zcela mimo, caption je dost */
   .hero-stages { display: none; }
 
   .hero-ctas {
