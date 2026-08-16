@@ -1,6 +1,27 @@
 // Year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
+/* ---------- Videa: mimo obrazovku pauza, ať zbytečně nežerou výkon ---------- */
+/* Přehrávání samo obstará atribut autoplay, tohle ho jen krotí. */
+(function () {
+  const videos = Array.from(document.querySelectorAll('video[data-autoplay]'));
+  if (!videos.length || !('IntersectionObserver' in window)) return;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const v = entry.target;
+      if (entry.isIntersecting) {
+        const p = v.play();
+        if (p) p.catch(() => {});
+      } else if (!v.paused) {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  videos.forEach((v) => io.observe(v));
+})();
+
 /* ---------- Hero scroll-driven build (canvas + lerp, mobile-aware) ---------- */
 (function () {
   const hero    = document.querySelector('.hero');
